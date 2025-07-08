@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -33,7 +34,14 @@ class PasswordResetLinkController extends Controller
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::broker('admins')->sendResetLink(
-            $request->only('email')
+            $request->only('email'),
+            function($user, $token){
+                $notifaction = new ResetPassword($token);
+                $notifaction ->createUrlUsing(function() use($user, $token){
+                    return route('admin.password.reset', ['token' => $token,'email' => $user->email]);
+                });
+                $user->notify($notifaction);
+            }
         );
 
         return $status == Password::RESET_LINK_SENT
