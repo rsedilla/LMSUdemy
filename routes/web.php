@@ -21,5 +21,10 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth:admin', 'verified'])->name('admin.dashboard');
 
+// Test route - remove this after testing
+Route::get('/admin/test', function() {
+    return 'Admin routes are working!';
+});
+
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

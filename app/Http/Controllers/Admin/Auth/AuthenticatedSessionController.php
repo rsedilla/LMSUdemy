@@ -40,8 +40,7 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('admin')->logout();
 
-        $request->session()->invalidate();
-
+        // Don't invalidate entire session - just regenerate token for security
         $request->session()->regenerateToken();
 
         return redirect('/');
