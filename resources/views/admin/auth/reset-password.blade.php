@@ -71,6 +71,8 @@
             font-feature-settings: "cv03", "cv04", "cv11";
         }
     </style>
+    @vite(['resources/js/admin/login.js'])
+
 </head>
 
 <body class=" d-flex flex-column">
@@ -90,7 +92,7 @@
                     <h2 class="h2 text-center mb-4">Reset Password</h2>
                     <form action="{{ route('admin.password.store') }}" method="post" autocomplete="off" novalidate>
                         @csrf
-                        
+
                         <!-- Password Reset Token -->
                         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
@@ -103,15 +105,45 @@
 
                         <div class="mb-3">
                             <label class="form-label">New Password</label>
-                            <input type="password" class="form-control" name="password" placeholder="Enter new password"
-                                autocomplete="off" required>
+                            <div class="input-group input-group-flat">
+                                <input type="password" class="form-control password" name="password"
+                                    placeholder="Enter new password" autocomplete="off" required>
+                                <span class="input-group-text toggle-password">
+                                    <a href="#" class="link-secondary" title="Show password"
+                                        data-bs-toggle="tooltip">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                            <path
+                                                d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            </div>
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm new password"
-                                autocomplete="off" required>
+                            <div class="input-group input-group-flat">
+                                <input type="password" class="form-control confirm-password" name="password_confirmation"
+                                    placeholder="Confirm new password" autocomplete="off" required>
+                                <span class="input-group-text confirm-password-toggle">
+                                    <a href="javascript:;" class="link-secondary" title="Show password"
+                                        data-bs-toggle="tooltip">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                            <path
+                                                d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            </div>
                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                         </div>
 
@@ -128,6 +160,36 @@
     <!-- Tabler Core -->
     <script src="{{ asset('admin/assets/dist/js/tabler.min.js?1692870487') }}" defer></script>
     <script src="{{ asset('admin/assets/dist/js/demo.min.js?1692870487') }}" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            document.querySelectorAll('[title="Show password"]').forEach(function(toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const inputGroup = this.closest('.input-group');
+                    const passwordInput = inputGroup.querySelector(
+                        'input[type="password"], input[type="text"]');
+                    const icon = this.querySelector('svg');
+
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        this.title = 'Hide password';
+                        // Change icon to "eye-off"
+                        icon.innerHTML =
+                            '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"/><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"/><path d="M3 3l18 18"/>';
+                    } else {
+                        passwordInput.type = 'password';
+                        this.title = 'Show password';
+                        // Change icon back to "eye"
+                        icon.innerHTML =
+                            '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
