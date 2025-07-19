@@ -35,12 +35,28 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'student'
-        ]);
+        if($request->type === 'student') {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'student',
+                'approve_status' => 'approved',
+            ]);
+        } elseif($request->type === 'instructor') {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'student',
+                'approve_status' => 'pending',
+            ]);
+        } else {
+            // Handle other user types if necessary
+            return redirect()->back()->withErrors(['type' => 'Invalid user type']);
+        }
+
+     
 
         event(new Registered($user));
 

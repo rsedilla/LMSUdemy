@@ -20,12 +20,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('bio')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
+            $table->string('document')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('facebook')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('website')->nullable();
             $table->string('github')->nullable();
+            $table->enum('approve_status', ['approved', 'pending', 'rejected'])->default('pending');
             $table->enum('login_as', ['instructor', 'student'])->nullable();
             $table->rememberToken();
             $table->timestamps();
