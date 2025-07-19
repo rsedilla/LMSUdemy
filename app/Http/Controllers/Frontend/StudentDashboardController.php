@@ -17,7 +17,7 @@ class StudentDashboardController extends Controller
     {
         $student = Auth::user();
         
-        return view('student.dashboard', compact('student'));
+        return view('frontend.student-dashboard.index', compact('student'));
     }
 
     /**

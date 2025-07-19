@@ -17,7 +17,7 @@ class InstructorDashboardController extends Controller
     {
         $instructor = Auth::user();
         
-        return view('instructor.dashboard', compact('instructor'));
+        return view('frontend.instructor-dashboard.index', compact('instructor'));
     }
 
     /**
